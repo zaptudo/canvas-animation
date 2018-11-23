@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Processando o Canvas após a tag</title>
+</head>
+
+<body>
+    <canvas width="900" height="300">Este navegador não suporta o canvas do HTML5</canvas>
+    <script>
+
+        var canvas = document.querySelector('canvas');
+        var context = canvas.getContext('2d');
+
+        var x = 20;
+        var y = 0;
+        var raio = 5;
+
+        var momentoAnterior = new Date().getTime();
+        
+        requestAnimationFrame(mexerBola);
+
+        function mexerBola() {
+
+            var momentoAtual = new Date().getTime();
+
+            var tempoDecorrido = momentoAtual - momentoAnterior;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            context.beginPath();
+            context.arc(x, y, raio, 0, 2 * Math.PI);
+            context.fill();
+
+            var velocidade = 300;
+            x += velocidade * tempoDecorrido / 1000;
+
+            xRad = x * (Math.PI / 180);
+            y = Math.sin(xRad) * 100 + 110;
+
+
+            momentoAnterior = momentoAtual;
+
+
+            requestAnimationFrame(mexerBola);
+        }
+
+    </script>
+</body>
+
+</html>
