@@ -16,8 +16,6 @@ Spritesheet.prototype = {
 
     proximoQuadro: function() {
 
-        debugger;
-
         var agora = new Date().getTime();
 
         if(!this.ultimoTempo) {
