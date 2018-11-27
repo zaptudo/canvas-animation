@@ -1,30 +1,45 @@
-const SETA_DIREITA = 39;
-const SETA_ESQUERDA = 37;
-const SETA_CIMA = 38;
-const SETA_BAIXO = 40;
+class Teclado {
 
-function Teclado(elemento) {
+    constructor(elemento) {
 
-    this.elemento = elemento;
-    this.pressionadas = [];
+        this.elemento = elemento;
+        this.pressionadas = [];
+        this.funcoesDisparo = [];
 
-    let teclado = this;
+        let teclado = this;
 
-    elemento.addEventListener('keydown', function(evento) {
+        elemento.addEventListener('keydown', (evento) => {
 
-        teclado.pressionadas[evento.keyCode] = true;
-    });
+            let tecla = evento.keyCode;
 
-    elemento.addEventListener('keyup', function(evento) {
+            if (this.funcoesDisparo[tecla] && !this.pressionadas[tecla]) {
+                this.funcoesDisparo[tecla]();
+            }
 
-        teclado.pressionadas[evento.keyCode] = false;
-    });
-}
+            this.pressionadas[tecla] = true;
+        });
 
-Teclado.prototype = { 
-    
-    pressionada: function(tecla) {
+        elemento.addEventListener('keyup', (evento) => {
+
+            let tecla = evento.keyCode;
+
+            this.pressionadas[tecla] = false;
+        });
+    }
+
+    static get SETA_DIREITA() { return 39 };
+    static get SETA_ESQUERDA() { return 37 };
+    static get SETA_CIMA() { return 38 };
+    static get SETA_BAIXO() { return 40 };
+    static get ESPACO() { return 32 };
+
+    pressionada(tecla) {
 
         return this.pressionadas[tecla];
+    }
+
+    disparou(tecla, callback) {
+
+        this.funcoesDisparo[tecla] = callback;
     }
 }

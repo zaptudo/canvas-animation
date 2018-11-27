@@ -1,55 +1,51 @@
-function Animacao(context) {
-    this.context = context;
-    this.sprites = [];
-    this.ligado = false;
-}
+class Animacao {
 
-Animacao.prototype = {
+    constructor(context) {
 
-    novoSprite: function(sprite) {
+        this.context = context;
+        this.sprites = [];
+        this.ligado = false;
+    }
+
+    novoSprite(sprite) {
 
         this.sprites.push(sprite);
-    },
+    }
 
-    ligar: function() {
+    ligar() {
 
         this.ligado = true;
         this.proximoFrame();
-    },
+    }
 
-    desligar: function() {
+    desligar() {
 
         this.ligado = false;
-    },
+    }
 
-    proximoFrame: function() {
+    proximoFrame() {
 
-        if(!this.ligado) {
+        if (!this.ligado) {
             return;
         }
 
         this.limparTela();
 
-        for(var i in this.sprites) {
+        for (let i in this.sprites) {
 
             this.sprites[i].atualizar();
         }
 
-        for(var i in this.sprites) {
+        for (let i in this.sprites) {
 
             this.sprites[i].desenhar();
         }
 
-        var animacao = this;
-        requestAnimationFrame(function() {
-            
-            animacao.proximoFrame();
-        });
-    },
+        requestAnimationFrame(() => this.proximoFrame());
+    }
 
-    limparTela: function() {
+    limparTela() {
 
-        var ctx = this.context;
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     }
 }
