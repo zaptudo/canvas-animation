@@ -54,7 +54,7 @@ class Heroi {
 
         let tiro = new Bola(this.context);
         tiro.x = this.x + 10;
-        tiro.y = this.y + 10;
+        tiro.y = this.y + 25;
         tiro.raio = 2;
         tiro.cor = 'red';
 
@@ -70,11 +70,13 @@ class Heroi {
 
         if (this.direcao == Heroi.DIRECAO_CIMA) {
 
+            tiro.y = this.y + 10;
             tiro.velocidadeY = -20;
         }
 
         if (this.direcao == Heroi.DIRECAO_BAIXO) {
 
+            tiro.y = this.y + 40;
             tiro.velocidadeY = 20;
         }
 
