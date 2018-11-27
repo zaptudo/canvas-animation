@@ -1,0 +1,57 @@
+<DOCTYPE html>
+<html>
+
+    <head>
+        <title>Movimentando personagens com keydown</title>
+        <script src="Teclado.js"></script>
+    </head>
+
+    <body>
+        <canvas id="canvas_teclado_1" width="500" height="500"></canvas>
+        <script>
+
+            let canvas = document.querySelector('#canvas_teclado_1');
+            let context = canvas.getContext('2d');
+
+            let posicaoX = 10;
+            let posicaoY = 10;
+            desenharPersonagem();
+
+            var teclado = new Teclado(document);
+
+            requestAnimationFrame(animar);
+
+            function desenharPersonagem() {
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.fillRect(posicaoX, posicaoY, 20, 50);
+            }
+
+            function animar() {
+
+                if(teclado.pressionada(SETA_ESQUERDA)) {
+
+                    posicaoX -= 5;                    
+                }
+                
+                if(teclado.pressionada(SETA_DIREITA)) {
+
+                    posicaoX += 5;
+                }
+
+                if(teclado.pressionada(SETA_CIMA)) {
+
+                    posicaoY -= 5;
+                }
+                
+                if(teclado.pressionada(SETA_BAIXO)) {
+
+                    posicaoY += 5;
+                }
+
+                desenharPersonagem(); 
+                requestAnimationFrame(animar);
+            }
+        </script>
+    </body>
+</html>
