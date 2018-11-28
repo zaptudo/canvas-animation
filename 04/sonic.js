@@ -14,6 +14,8 @@ function Sonic(context, teclado, imagem) {
 
     this.sheet = new Spritesheet(context, imgSonic, 3, 8);
     this.sheet.intervalo = 60;
+
+    this.velocidade = 10;
 }
 
 
@@ -26,7 +28,7 @@ Sonic.prototype = {
 
             this.direcao = DIRECAO_DIREITA;
             this.estado = MOVIMENTO;
-            this.x += 5;
+            this.x += this.velocidade;
 
             return;
         }
@@ -35,7 +37,7 @@ Sonic.prototype = {
 
             this.direcao = DIRECAO_ESQUERDA;
             this.estado = MOVIMENTO;
-            this.x -= 5;
+            this.x -= this.velocidade;
 
             return;
         }
