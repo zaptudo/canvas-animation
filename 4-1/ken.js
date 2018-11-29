@@ -30,20 +30,27 @@ function Ken(context, teclado, imagem) {
     this.y = 0;
 
     this.estado = PARADO;
+    this.golpeando = false;
 
     this.sheet = new Spritesheet(context, imagem, 10, 7);
     this.sheet.intervalo = 120;
 
     this.velocidade = 5;
+    this.escala = 1.5;
 }
 
 
 
 Ken.prototype = {
 
-    atualizar: function() {
+    atualizar: function () {
 
-        if(this.teclado.pressionada(Teclado.SETA_DIREITA)) {
+        if (!!this.golpeando) {
+            
+            return;
+        }
+
+        if (this.teclado.pressionada(Teclado.SETA_DIREITA)) {
 
             this.estado = ANDANDO;
             this.x += this.velocidade;
@@ -51,7 +58,7 @@ Ken.prototype = {
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.SETA_ESQUERDA)) {
+        if (this.teclado.pressionada(Teclado.SETA_ESQUERDA)) {
 
             this.estado = ANDANDO;
             this.x -= this.velocidade;
@@ -59,7 +66,7 @@ Ken.prototype = {
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.SETA_CIMA)) {
+        if (this.teclado.pressionada(Teclado.SETA_CIMA)) {
 
             this.estado = PULO;
             this.y == 1;
@@ -67,35 +74,35 @@ Ken.prototype = {
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.SETA_BAIXO)) {
+        if (this.teclado.pressionada(Teclado.SETA_BAIXO)) {
 
             this.estado = AGACHADO;
 
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.A)) {
+        if (this.teclado.pressionada(Teclado.A)) {
 
             this.estado = SOCO;
 
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.S)) {
+        if (this.teclado.pressionada(Teclado.S)) {
 
             this.estado = CHUTE_FRACO;
 
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.D)) {
+        if (this.teclado.pressionada(Teclado.D)) {
 
             this.estado = CHUTE_FORTE;
 
             return;
         }
 
-        if(this.teclado.pressionada(Teclado.Z)) {
+        if (this.teclado.pressionada(Teclado.Z)) {
 
             this.estado = MAGIA;
 
@@ -105,63 +112,62 @@ Ken.prototype = {
         this.estado = PARADO;
     },
 
-    desenhar: function() {
+    desenhar: function () {
 
-        if(this.estado == PARADO) {
+        if (!!this.golpeando) {
+
+            let isFimAnimacao = this.animarGolpe();
+
+            if (!!isFimAnimacao) {
+
+                this.golpeando = false;
+                this.estado = PARADO;
+            }
+
+            return;
+        }
+
+        if (this.estado == PARADO) {
 
             this.sheet.linha = PARADO;
             this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[ANDANDO] - 1;
             this.sheet.proximoQuadro();
+            this.sheet.desenhar(this.x, this.y, this.escala);
         }
 
-        if(this.estado == ANDANDO) {
+        if (this.estado == ANDANDO) {
 
             this.sheet.linha = ANDANDO;
             this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[ANDANDO] - 1;
             this.sheet.proximoQuadro();
+            this.sheet.desenhar(this.x, this.y, this.escala);
         }
 
-        if(this.estado == PULO) {
-
-            this.sheet.linha = PULO;
-            this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[PULO] - 1;
-            this.sheet.proximoQuadro();
-        }
-
-        if(this.estado == AGACHADO) {
+        if (this.estado == AGACHADO) {
 
             this.sheet.linha = AGACHADO;
             this.sheet.coluna = 0;
-        }     
-
-        if(this.estado == SOCO) {
-
-            this.sheet.linha = SOCO;
-            this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[SOCO] - 1;
-            this.sheet.proximoQuadro();
+            this.sheet.desenhar(this.x, this.y, this.escala);
         }
 
-        if(this.estado == CHUTE_FRACO) {
+        if (this.estado == MAGIA || this.estado == SOCO || this.estado == CHUTE_FRACO || this.estado == CHUTE_FORTE || this.estado == PULO) {
 
-            this.sheet.linha = CHUTE_FRACO;
-            this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[CHUTE_FRACO] - 1;
-            this.sheet.proximoQuadro();
+            this.golpeando = true;
+            this.sheet.linha = this.estado;
+            this.sheet.coluna = 0;
+            this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[this.estado];
+        }
+    },
+
+    animarGolpe: function () {
+
+        let isFimAnimacao = this.sheet.proximoQuadro();
+
+        if (!isFimAnimacao) {
+
+            this.sheet.desenhar(this.x, this.y, this.escala);
         }
 
-        if(this.estado == CHUTE_FORTE) {
-
-            this.sheet.linha = CHUTE_FORTE;
-            this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[CHUTE_FORTE] - 1;
-            this.sheet.proximoQuadro();
-        }
-
-        if(this.estado == MAGIA) {
-
-            this.sheet.linha = MAGIA;
-            this.sheet.tamanhoAnimacao = TAMANHO_ANIMACAO[MAGIA] - 1;
-            this.sheet.proximoQuadro();
-        }
-
-        this.sheet.desenhar(this.x, this.y);
+        return isFimAnimacao;
     }
 }

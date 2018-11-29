@@ -17,6 +17,13 @@ Spritesheet.prototype = {
 
     proximoQuadro: function() {
 
+        let isUltimoQuadro = false;
+
+        if (this.coluna == this.tamanhoAnimacao - 1) {
+
+            isUltimoQuadro = true;
+        }
+
         var agora = new Date().getTime();
 
         if(!this.ultimoTempo) {
@@ -25,15 +32,17 @@ Spritesheet.prototype = {
 
         if(agora - this.ultimoTempo < this.intervalo) {
 
-            return;
+            return false;
         }
 
         this.coluna = (this.coluna + 1) % this.tamanhoAnimacao;
 
         this.ultimoTempo = agora;
+
+        return isUltimoQuadro;
     },
 
-    desenhar: function(x, y) {
+    desenhar: function(x, y, escala) {
 
         let larguraQuadro = this.imagem.width / this.qtdColunas;
         let alturaQuadro = this.imagem.height / this.qtdLinhas;
@@ -49,8 +58,8 @@ Spritesheet.prototype = {
             alturaQuadro,
             x,
             y,
-            larguraQuadro,
-            alturaQuadro,
+            larguraQuadro * escala,
+            alturaQuadro * escala,
         );
     }
 };
